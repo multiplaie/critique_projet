@@ -30,6 +30,18 @@ $(document).ready(function(){
         }
     }
 
+    function saveVote(action){
+        $.getJSON('//freegeoip.net/json/?callback=?', function(data) {
+
+          $.ajax({
+              type: "POST",
+              url: "saveVote.php",
+              data:{geo:data, action:action},
+              success: function(){console.log('ok')}
+          });
+        });
+    }
+
     $("#critique .btn").bind("click", function(e){
         e.preventDefault();
         var action = $(this).attr('data-value');
@@ -39,6 +51,7 @@ $(document).ready(function(){
             decreaseState();
         }
         changeWordState();
+        saveVote(action);
     });
 
     init();
