@@ -41,12 +41,32 @@ class Database
     public function getData(){
         return $this->data;
     }
+
+    public function checkIpExist($ip){
+        $data = $this->getData();
+        $find = "0.0.0.0";
+        foreach ($data as $key => $value) {
+            if ($value->geo->ip == $ip) {
+                $find = $ip;
+            }
+        }
+        return $find;
+    }
 }
 
 
 $db = new Database();
 if (isset($_POST)&&!empty($_POST)) {
-    $db->insertNew($_POST);
+    switch ($_POST['action']) {
+        case 'insertNewAnswer':
+            $db->insertNew($_POST['data']);
+            break;
+        case 'checkIpExist':
+            var_dump("{'ip':".$db->checkIpExist($_POST['data']['ip'])."}");die();
+            return "{'ip':".$db->checkIpExist($_POST['data']['ip'])."}";
+            break;
+    }
+
 }
 
  ?>

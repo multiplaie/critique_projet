@@ -32,3 +32,10 @@ body{
     color: #f0f0f0;
     box-shadow: 0.25em 0.25em #eee;
 }
+
+#critique.disabled .btn{
+    background-color: inherit;
+    color: #aaa;
+    border: 1px solid #aaa;isabled
+
+}
