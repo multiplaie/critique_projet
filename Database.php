@@ -52,21 +52,41 @@ class Database
         }
         return $find;
     }
+
+    public function getWordStateSaved(){
+        $data = $this->getData();
+        $score = 127;
+        $score_max = 255;
+        foreach ($data as $key => $value) {
+            if ($value->answer == 1 && $score + 5 <= $score_max) {
+                $score += 5;
+            }else if ($value->answer == 0 && $score - 5 >= $score_max) {
+                $score -= 5;
+            }
+        }
+        return $score;
+    }
 }
 
 
 $db = new Database();
 if (isset($_POST)&&!empty($_POST)) {
+    $return = "ok";
     switch ($_POST['action']) {
         case 'insertNewAnswer':
             $db->insertNew($_POST['data']);
             break;
         case 'checkIpExist':
-            echo json_encode(
-                array("ip"=>$db->checkIpExist($_POST['data']['ip']))
-            );
+
+                $return = $db->checkIpExist($_POST['data']['ip']);
+            break;
+        case 'getWordStateSaved':
+            $return = $db->getWordStateSaved();
             break;
     }
+    echo json_encode(
+        array("result"=>$return)
+    );
 
 }
 

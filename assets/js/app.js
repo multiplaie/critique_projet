@@ -11,9 +11,27 @@ $(document).ready(function(){
     }
 
     function init(){
-        word_state = 127;
-        changeWordState();
+        getWordStateSaved();
         checkIpExist();
+
+    }
+
+    function getWordStateSaved(){
+        $.getJSON({
+            type: "POST",
+            url: "Database.php",
+            data:{action:"getWordStateSaved"},
+            success: function(data){
+
+                setWordState(data.result);
+                changeWordState();
+
+            }
+        });
+    }
+
+    function setWordState(value){
+        word_state = value;
     }
 
     function increaseState(){
@@ -45,7 +63,7 @@ $(document).ready(function(){
         $.getJSON('//freegeoip.net/json/?callback=?', function(json){
             $.getJSON({
                 type: "POST",
-                url: "saveVote.php",
+                url: "Database.php",
                 data:{data:{ip:json.ip}, action:'checkIpExist'},
                 success: function(data){
                     if (data.ip != "0.0.0.0") {
@@ -56,19 +74,16 @@ $(document).ready(function(){
         });
     }
 
-    function getGeoData(){
-        console.log($.getJSON('//freegeoip.net/json/?callback=?')
-            .done(function(json){return json}));
-    }
-
     function saveVote(answer){
         if (form_enabled) {
             $.getJSON('//freegeoip.net/json/?callback=?', function(json){
                 $.ajax({
                     type: "POST",
-                    url: "saveVote.php",
+                    url: "Database.php",
                     data:{data:{geo:json, answer:answer}, action:'insertNewAnswer'},
-                    success: function(){console.log('ok')}
+                    success: function(){
+                        disabledForm();
+                    }
                 });
             });
         }
