@@ -62,8 +62,9 @@ if (isset($_POST)&&!empty($_POST)) {
             $db->insertNew($_POST['data']);
             break;
         case 'checkIpExist':
-            var_dump("{'ip':".$db->checkIpExist($_POST['data']['ip'])."}");die();
-            return "{'ip':".$db->checkIpExist($_POST['data']['ip'])."}";
+            echo json_encode(
+                array("ip"=>$db->checkIpExist($_POST['data']['ip']))
+            );
             break;
     }
 

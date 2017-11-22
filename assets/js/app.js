@@ -43,12 +43,14 @@ $(document).ready(function(){
 
     function checkIpExist(){
         $.getJSON('//freegeoip.net/json/?callback=?', function(json){
-            $.ajax({
+            $.getJSON({
                 type: "POST",
                 url: "saveVote.php",
                 data:{data:{ip:json.ip}, action:'checkIpExist'},
                 success: function(data){
-                    disabledForm();
+                    if (data.ip != "0.0.0.0") {
+                        disabledForm();
+                    };
                 }
             });
         });
